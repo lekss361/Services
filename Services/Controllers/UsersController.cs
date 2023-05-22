@@ -4,8 +4,10 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.BAL.Services;
+using Services.DAL;
 using Services.Models;
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -14,12 +16,13 @@ public class UsersController : ControllerBase
 
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
+    private readonly IDbRepository rpository;
 
-    public UsersController(IUserService userService, IMapper mapper)
+    public UsersController(IUserService userService, IMapper mapper, IDbRepository rpository)
     {
         _userService = userService;
         _mapper = mapper;
-
+        this.rpository = rpository;
     }
     [HttpPost]
     public ActionResult AddUser([FromBody] User userModel)
@@ -31,13 +34,12 @@ public class UsersController : ControllerBase
         return StatusCode(StatusCodes.Status201Created, idAddedEntity);
     }
 
-     [HttpPost]
-    [Route("/1")]
-    [Authorize]
-    public ActionResult AddUser1([FromBody] User userModel)
+     [HttpGet]
+    [Route("/1/{message}")]
+    public ActionResult AddUser1(int message)
     {
-
-        return StatusCode(StatusCodes.Status201Created);
+        var c = rpository.Get<UserDto>(x=>x.Id== message);
+        return StatusCode(StatusCodes.Status201Created, c);
     }
 
      [HttpPost]
