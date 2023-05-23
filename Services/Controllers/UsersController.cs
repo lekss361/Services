@@ -34,7 +34,7 @@ public class UsersController : ControllerBase
         return StatusCode(StatusCodes.Status201Created, idAddedEntity);
     }
 
-     [HttpGet]
+    [HttpGet]
     [Route("/1/{message}")]
     public ActionResult AddUser1(int message)
     {
@@ -42,13 +42,20 @@ public class UsersController : ControllerBase
         return StatusCode(StatusCodes.Status201Created, c);
     }
 
-     [HttpPost]
-    [Route("/2")]
-    [AuthorizeRole(Role.User,Role.Admin)]
-
-    public ActionResult AddUser1q([FromBody] User userModel)
+     [HttpGet]
+    [Route("/api/users")]
+    public ActionResult AddUser2()
     {
-        return StatusCode(StatusCodes.Status201Created);
+        var c = rpository.Get<UserDto>(x=>x.IsActive== true);
+        return StatusCode(StatusCodes.Status201Created, c);
+    }
+
+     [HttpGet]
+    [Route("/22")]
+
+    public ActionResult AddUser1q()
+    {
+        return StatusCode(StatusCodes.Status201Created, new int[4] {1,4,6,6});
     }
 
 
